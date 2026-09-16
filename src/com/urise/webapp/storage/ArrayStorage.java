@@ -1,3 +1,9 @@
+package com.urise.webapp.storage;
+
+import com.urise.webapp.model.Resume;
+import java.util.Arrays;
+
+
 /**
  * Array based storage for Resumes
  */
@@ -32,7 +38,7 @@ public class ArrayStorage {
 
 
         }
-        if (notPresent) {
+        if (notPresent&&size<storage.length) {
             storage[size] = r;
             size++;
         } else {
@@ -71,13 +77,7 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     public Resume[] getAll() {
-        Resume[] resumeAll = new Resume[size];
-        for (int i = 0; i < size; i++) {
-            resumeAll[i] = storage[i];
-
-        }
-
-        return resumeAll;
+        return Arrays.copyOf(storage, size);
     }
 
     public int size() {
