@@ -15,7 +15,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public abstract class AbstractStorageTest {
-    protected static final File STORAGE_DIR = new File("/Users/87edikgmail.com/Developer/basejavaR/src/com/urise/webapp/storage");
+    protected static final File STORAGE_DIR = new File("/Users/87edikgmail.com/Developer/basejavaR/storage");
     protected Storage storage;
     private static final String UUID_1 = "UUID_1";
     private static final String UUID_2 = "UUID_2";
