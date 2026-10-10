@@ -4,10 +4,7 @@ import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.sql.ConnectionFactory;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 public class SqlStorage implements Storage {
@@ -36,12 +33,34 @@ public class SqlStorage implements Storage {
 
     @Override
     public void save(Resume r) {
-
+        try (
+                Connection conn = connectionFactory.getConnection();
+                PreparedStatement ps = conn.prepareStatement("INSERT INTO resume r (uuid, full_name) VALUES (?, ?)");
+        ) {
+            ps.setString(1, r.getUuid());
+            ps.setString(2, r.getFullName());
+            ps.execute();
+        } catch (SQLException e) {
+            throw new StorageException(e);
+        }
     }
 
     @Override
     public Resume get(String uuid) {
-        return null;
+        try (
+                Connection conn = connectionFactory.getConnection();
+                PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume r WHERE r.uuid = ?");
+        ) {
+            ps.setString(1, uuid);
+            ResultSet rs = ps.executeQuery();
+            if (!rs.next()) {
+                throw new StorageException(uuid, "Resume " + uuid + " is not exist");
+            }
+            Resume r = new Resume(uuid, rs.getString("full_name"));
+            return r;
+        } catch (SQLException e) {
+            throw new StorageException(e);
+        }
     }
 
     @Override
