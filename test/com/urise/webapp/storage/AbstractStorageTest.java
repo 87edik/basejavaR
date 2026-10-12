@@ -9,8 +9,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.sql.Connection;
 import java.time.Month;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,8 +35,10 @@ public abstract class AbstractStorageTest {
         R3 = new Resume(UUID_3, "Name3");
         R4 = new Resume(UUID_4, "Name4");
 
-//        R1.addContact(ContactType.MAIL, "mail@mail.ru");
-//        R1.addContact(ContactType.PHONE, "1111");
+        R1.addContact(ContactType.MAIL, "mail@mail.ru");
+        R1.addContact(ContactType.PHONE, "1111");
+        R4.addContact(ContactType.SKYPE, "Skype");
+        R4.addContact(ContactType.PHONE, "4444");
 //        R1.addSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
 //        R1.addSection(SectionType.PERSONAL, new TextSection("Personal data"));
 //        R1.addSection(SectionType.ACHIEVEMENT, new ListSection("Achievenent11", "Achievenent12", "Achievenent13"));
@@ -72,9 +76,11 @@ public abstract class AbstractStorageTest {
     @Before
     public void setUp() {
         storage.clear();
+
         storage.save(R1);
         storage.save(R2);
         storage.save(R3);
+
 
     }
 
@@ -115,6 +121,10 @@ public abstract class AbstractStorageTest {
     @Test
     public void update() {
         Resume newResume = new Resume(UUID_1, "New Name");
+        R1.addContact(ContactType.MAIL, "mail@goole.com");
+        R1.addContact(ContactType.SKYPE, "New Skype");
+        R1.addContact(ContactType.MOBILE, "+7 921 222-22-22");
+
         storage.update(newResume);
         assertTrue(newResume.equals(storage.get(UUID_1)));
     }
@@ -135,7 +145,10 @@ public abstract class AbstractStorageTest {
     public void getAllSorted() {
         List<Resume> list = storage.getAllSorted();
         assertEquals(3, list.size());
-        assertEquals(list, Arrays.asList(R1, R2, R3));
+
+        List<Resume> sortedResumes = Arrays.asList(R1, R2, R3);
+        Collections.sort(sortedResumes);
+        assertEquals(sortedResumes, list);
 
     }
 

@@ -15,6 +15,7 @@ public class ExceptionUtil {
                 return new ExistStorageException(e.getMessage());
             }
         }
+
         return new StorageException(e);
     }
 }
