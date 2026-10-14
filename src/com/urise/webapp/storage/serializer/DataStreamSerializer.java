@@ -1,16 +1,13 @@
 package com.urise.webapp.storage.serializer;
 
-import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.*;
 
-import javax.swing.text.Position;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class DataStreamSerializer implements StreamSerializer {
 
@@ -68,10 +65,10 @@ public class DataStreamSerializer implements StreamSerializer {
           String uuid = dis.readUTF();
           String fullName = dis.readUTF();
           Resume resume = new Resume(uuid, fullName);
-          readItems(dis, ()-> resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+          readItems(dis, ()-> resume.setContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
           readItems(dis, ()->{
               SectionType sectionType = SectionType.valueOf(dis.readUTF());
-              resume.addSection(sectionType, readSection(dis, sectionType));
+              resume.setSection(sectionType, readSection(dis, sectionType));
           });
 
 
